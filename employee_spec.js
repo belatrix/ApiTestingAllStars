@@ -1,8 +1,5 @@
-/**
- * frisby.js: Facebook usage example
- * (C) 2012, Vance Lucas
- */
-var frisby = require('../lib/frisby');
+
+var frisby = require('./lib/frisby');
 
 // Global setup for all tests
 frisby.globalSetup({
