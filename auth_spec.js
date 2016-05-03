@@ -32,10 +32,10 @@ frisby.create('Authentication Test')
             log(token);
             //Change Password Test
             frisby.create('Change Password Test')
-                .post('https://allstars-belatrix.herokuapp.com:443/api/auth/password/', {
-                    "new_password": constants.PASSWORD2,
-                    "re_new_password": constants.PASSWORD2,
-                    "current_password": constants.PASSWORD
+                .post(constants.MAIN_URL + 'auth/password/', {
+                    new_password: constants.PASSWORD2,
+                    re_new_password: constants.PASSWORD2,
+                    current_password: constants.PASSWORD
                 })
                 .addHeader('Authorization', 'Token ' + token)
                 .expectStatus(200)
@@ -50,10 +50,10 @@ frisby.create('Authentication Test')
                         });
                         //Give Stars Test
                         frisby.create('Change Password Test 2')
-                            .post('https://allstars-belatrix.herokuapp.com:443/api/auth/password/', {
-                                "new_password": constants.PASSWORD,
-                                "re_new_password": constants.PASSWORD,
-                                "current_password": constants.PASSWORD2
+                            .post(constants.MAIN_URL + 'auth/password/', {
+                                new_password : constants.PASSWORD,
+                                re_new_password : constants.PASSWORD,
+                                current_password : constants.PASSWORD2
                             })
                             .addHeader('Authorization', 'Token ' + token)
                             .expectStatus(200)
