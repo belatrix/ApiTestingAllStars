@@ -1,6 +1,6 @@
 var frisby = require('./lib/frisby');
 var constants = require('./lib/constants');
-
+var token = "";
 //Authentication Test
 frisby.create('Authentication Test')
     .post(constants.MAIN_URL + constants.EMPLOYEE + 'authenticate/', {
@@ -28,19 +28,18 @@ frisby.create('Authentication Test')
                     }
                 }
             });
-            //Give Stars Test
-            frisby.create('Give Stars Test')
-                .post(constants.MAIN_URL + constants.STAR + constants.IDSERGIO + constants.GIVESTARS + constants.IDBOBBY + '/' , {
-                    "pk": 1,
-                    "category": "1",
-                    "subcategory": "1",
-                    "text": "MVP"
-                },  {
-                    json: true
+            token = res.token;
+            log(token);
+            //Change Password Test
+            frisby.create('Change Password Test')
+                .post('https://allstars-belatrix.herokuapp.com:443/api/auth/password/', {
+                    "new_password": constants.PASSWORD2,
+                    "re_new_password": constants.PASSWORD2,
+                    "current_password": constants.PASSWORD
                 })
-                .addHeader('Authorization', 'Token ' + res.token)
-                .expectStatus(201)
-                .afterJSON(
+                .addHeader('Authorization', 'Token ' + token)
+                .expectStatus(200)
+                .after(
                     function() {
                         frisby.globalSetup({
                             request: {
@@ -49,7 +48,16 @@ frisby.create('Authentication Test')
                                 }
                             }
                         });
-
+                        //Give Stars Test
+                        frisby.create('Change Password Test 2')
+                            .post('https://allstars-belatrix.herokuapp.com:443/api/auth/password/', {
+                                "new_password": constants.PASSWORD,
+                                "re_new_password": constants.PASSWORD,
+                                "current_password": constants.PASSWORD2
+                            })
+                            .addHeader('Authorization', 'Token ' + token)
+                            .expectStatus(200)
+                            .toss();
                     })
                 .toss();
         })
