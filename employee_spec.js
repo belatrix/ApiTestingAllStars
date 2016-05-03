@@ -1,10 +1,11 @@
 var frisby = require('./lib/frisby');
+var constants = require('./lib/constants');
 
 
-frisby.create('Authentication')
-    .post('https://allstars-belatrix.herokuapp.com:443/api/employee/authenticate/', {
-        "username": "sinfante",
-        "password": "allstars"
+frisby.create('Authentication Test')
+    .post(constants.MAIN_URL + constants.EMPLOYEE +'authenticate/', {
+        username : constants.USERNAME,
+        password : constants.PASSWORD
     }, {
         json: true
     }, {
@@ -27,15 +28,15 @@ frisby.create('Authentication')
                     }
                 }
             });
-            console.log("Autenticated with token : " + res.token);
-            frisby.create('Get employee list 2')
-                .get('https://allstars-belatrix.herokuapp.com:443/api/employee/list/')
+            log('Autenticated username :'+ constants.USERNAME +' and with token : ' + res.token);
+            frisby.create('Employee List Test')
+                .get(constants.MAIN_URL + constants.EMPLOYEE + 'list/')
                 .expectStatus(200)
                 .addHeader('Authorization', 'Token ' + res.token)
                 .expectHeaderContains('Content-Type', 'application/json')
                 .expectJSONTypes({
                     count: Number,
-                    next: null,
+                    next: String,
                     previous: null,
                     results: [{
                       pk: Number,
@@ -50,6 +51,15 @@ frisby.create('Authentication')
                       current_month_score: Number
                   }]
                 })
+                .afterJSON(
+                        function(res) {
+                            log('Employee List Test Passed');
+                })
                 .toss();
         })
     .toss();
+
+    
+function log(){
+    console.log('Autenticated username :');
+}
