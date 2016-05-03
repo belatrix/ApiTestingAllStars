@@ -35,21 +35,28 @@ frisby.create('Authentication Test')
                 .addHeader('Authorization', 'Token ' + res.token)
                 .expectHeaderContains('Content-Type', 'application/json')
                 .expectJSONTypes({
-                    count: Number,
-                    next: String,
-                    previous: null,
-                    results: [{
-                      pk: Number,
-                      username: String,
-                      email: String,
-                      first_name: String,
-                      last_name: String,
-                      level: Number,
-                      avatar: String,
-                      score: Number,
-                      last_month_score: Number,
-                      current_month_score: Number
-                  }]
+                count: Number,
+                next: String,
+                previous: function(value) {
+                  if( value === "undefined"){
+                    value=0;
+                  }else if (value === "null"){
+                    value=0;
+                  }
+                  },
+                results: Object
+                })
+                .expectJSONTypes('results.*',{
+                  pk: Number,
+                  username: String,
+                  email: String,
+                  first_name: String,
+                  last_name: String,
+                  level: Number,
+                  avatar: String,
+                  score: Number,
+                  last_month_score: Number,
+                  current_month_score: Number
                 })
                 .afterJSON(
                         function(res) {
