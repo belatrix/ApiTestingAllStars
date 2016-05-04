@@ -16,26 +16,17 @@ var constants = require('./lib/constants');
 
 
 
-                .afterJSON(
-                        function(res) {
-                            log('Category List Test - Passed');
-                            frisby.globalSetup({
-                              request:{
-                                headers:{'Accept': 'application/json'}
-                              }
-                            });
+                .afterJSON(function(json) {
+                    var value = json[0];
+                    console.log(value.pk);
 
-                    console.log(res.pk);
-
-/*
               frisby.create('Returns full subcategory list according to category id')
-              .get(constants.MAIN_URL + constants.CAT + res.pk + constants.SUBC + constants.LIST)
+              .get(constants.MAIN_URL + constants.CAT + value.pk +'/' + constants.SUBC + constants.LIST)
               .expectStatus(200)
-              .addHeader('Authorization', 'Token ' + res.token)
               .expectHeaderContains('Content-Type', 'application/json')
               .expectJSONTypes({
-                  pk: Number,
-                  name: String
+                  pk: undefined,
+                  name: undefined
               })
 
               .afterJSON(
