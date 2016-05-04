@@ -2,53 +2,34 @@ var frisby = require('./lib/frisby');
 var constants = require('./lib/constants');
 
 
-frisby.create('Authentication Test')
-    .post(constants.MAIN_URL + constants.EMPLOYEE +'authenticate/', {
-        username : constants.USERNAME,
-        password : constants.PASSWORD
-    }, {
-        json: true
-    }, {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .expectStatus(200)
-    .expectHeaderContains('Content-Type', 'application/json')
-    .expectJSONTypes({
-        token: String,
-        user_id: Number
-    })
-    .afterJSON(
-        function(res) {
-            frisby.globalSetup({
-                request: {
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                }
-            });
-            log('Autenticated username :'+ constants.USERNAME +' and with token : ' + res.token);
 
             frisby.create('Returns full category list ordered by weight')
                 .get(constants.MAIN_URL + constants.CAT + constants.LIST)
                 .expectStatus(200)
-                .addHeader('Authorization', 'Token ' + res.token)
                 .expectHeaderContains('Content-Type', 'application/json')
                 .expectJSONTypes({
-                    pk: Number,
-                    name: String,
-                    weight: Number
+                    pk: undefined,
+                    name: undefined,
+                    weight: undefined,
+                    comment_required: undefined
                 })
+
+
 
                 .afterJSON(
                         function(res) {
                             log('Category List Test - Passed');
-                })
-              .toss();
+                            frisby.globalSetup({
+                              request:{
+                                headers:{'Accept': 'application/json'}
+                              }
+                            });
 
+                    console.log(res.pk);
+
+/*
               frisby.create('Returns full subcategory list according to category id')
-              .get(constants.MAIN_URL + constants.CAT + constants.SUBC + constants.LIST)
+              .get(constants.MAIN_URL + constants.CAT + res.pk + constants.SUBC + constants.LIST)
               .expectStatus(200)
               .addHeader('Authorization', 'Token ' + res.token)
               .expectHeaderContains('Content-Type', 'application/json')
@@ -62,7 +43,7 @@ frisby.create('Authentication Test')
                           log('Sub category List Test according category id - Passed');
               })
             .toss();
-
+/*
             frisby.create('Returns full subcategory list ordered by name')
             .get(constants.MAIN_URL + constants.CAT + constants.SUBC + constants.LIST)
             .expectStatus(200)
@@ -101,8 +82,8 @@ frisby.create('Authentication Test')
                         log('Sub category List Detail Test - Passed');
             })
            .toss();
-
-        })
+*/
+    })
     .toss();
 
 
