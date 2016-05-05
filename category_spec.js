@@ -33,13 +33,14 @@ var constants = require('./lib/constants');
                         name: undefined
                     })
 
-                    .after(
+                    .afterJSON(
                       console.log('Returns full subcategory list according to category id - Passed')
-                    )
-                    .toss();
+                    );
 
-                    }
-                  });
+                  }
+
+                })
+                .toss();
 
 //////////////// Keyword List
                   frisby.create('Returns full keyword list ordered by name')
@@ -51,9 +52,6 @@ var constants = require('./lib/constants');
                       name: undefined
                   })
 
-                  .after(
-                    console.log('Returns full keyword list ordered by name - Passed')
-                  )
                   .toss();
 
 
@@ -69,11 +67,8 @@ var constants = require('./lib/constants');
                 name: undefined
             })
 
-            .after(
-                    console.log('Returns full subcategory list ordered by name - Passed')
-            )
             .toss();
-
+/*
 //////////////// Subcategory on Categories
             frisby.create('Returns subcategory detail category list')
             .get(constants.MAIN_URL + constants.CAT + constants.SUBC)
@@ -100,7 +95,6 @@ var constants = require('./lib/constants');
                   subcategoryDetail(val);
               }
 
-
             function subCategoryDetail(val){
                 console.log("Category: " + val.name + " - id: " +val.pk);
                 frisby.create('Returns full subcategory list according to category id')
@@ -110,15 +104,12 @@ var constants = require('./lib/constants');
                 .expectJSONTypes({
                     pk: undefined,
                     name: undefined
-                })
+                  })
 
-                .after(
-                        console.log('Returns subcategory detail category list - Passed')
-                )
-
-                .toss();
-
-              }
-
-
-              });
+                  .afterJSON(
+                    console.log('Returns full subcategory list according to category id - Passed')
+                  );
+                }
+              })
+              .toss();
+*/
