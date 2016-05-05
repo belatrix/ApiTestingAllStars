@@ -14,11 +14,15 @@ var constants = require('./lib/constants');
                     comment_required: undefined
                 })
 
-
-
                 .afterJSON(function(json) {
                     var value = json[0];
                     console.log(value.pk);
+                    console.log(json.length);
+                    console.log(json);
+                    var sizej = json.length;
+                    console.log(sizej);
+                    
+
 
               frisby.create('Returns full subcategory list according to category id')
               .get(constants.MAIN_URL + constants.CAT + value.pk +'/' + constants.SUBC + constants.LIST)
