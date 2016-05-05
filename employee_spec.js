@@ -1,14 +1,14 @@
 var frisby = require('./lib/frisby');
-var constants = require('./lib/constants');
+var cst = require('./lib/constants');
 var token = "";
 
 log('=====================================================');
-log('Employee Test Authentication');
+log('Employee Test Authentication -- 1');
 
-frisby.create('Authentication Test')
-    .post(constants.MAIN_URL + constants.EMPLOYEE + 'authenticate/', {
-        username: constants.USER_NAME,
-        password: constants.USER_PASSWORD
+frisby.create('Authentication Test -- 1')
+    .post(cst.MAIN_URL + cst.EMPLOYEE + 'authenticate/', {
+        username: cst.USER_NAME,
+        password: cst.USER_PASSWORD
     }, {
         json: true
     }, {
@@ -34,12 +34,12 @@ frisby.create('Authentication Test')
                 }
             });
             token = res.token;
-            log('Employee Test Authentication Passed');
+            log('Employee Test Authentication Passed -- 1');
             log('=====================================================');
-            log('Employee List Test');
+            log('Employee List Test -- 2');
             //GET /api/employee/list/ Returns the full employee list
             frisby.create('Employee List Test')
-                .get(constants.MAIN_URL + constants.EMPLOYEE + constants.LIST)
+                .get(cst.MAIN_URL + cst.EMPLOYEE + cst.LIST)
                 .addHeader('Authorization', 'Token ' + token)
                 .expectHeaderContains('Content-Type', 'application/json')
                 .expectStatus(200)
@@ -74,16 +74,18 @@ frisby.create('Authentication Test')
                 })
                 .afterJSON(
                     function(res) {
-                        log('Employee List Test Passed');
+                        log('Employee List Test Passed -- 2');
                         log('=====================================================');
-                        log('Employee List Test 2');
+                        log('Employee List Test ' + cst.EMP_TOTAL_SCORE + ' -- 3');
+
                         //GET /api/employee/list/top/{kind}/{quantity}/ Returns top {quantity} list, {kind} (total_score, level, last_month_score, current_month_score, last_year_score, current_year_score)
                         frisby.create('Employee List Test 2')
-                            .get(constants.MAIN_URL + constants.EMPLOYEE + constants.LIST + constants.TOP + constants.EMP_TOTAL_SCORE + '/2')
+                            .get(cst.MAIN_URL + cst.EMPLOYEE + cst.LIST + cst.TOP + cst.EMP_TOTAL_SCORE + '/' +  cst.T1_QUANTITY)
                             .addHeader('Authorization', 'Token ' + token)
                             .expectStatus(200)
                             .expectHeaderContains('Content-Type', 'application/json')
                             .inspectRequest()
+                            .inspectBody()
                             .expectJSONTypes('?', {
                                 "pk": Number,
                                 "username": String,
@@ -94,14 +96,37 @@ frisby.create('Authentication Test')
                             })
                             .afterJSON(
                                 function() {
-                                    log('Employee List Test 2 Passed');
+                                    log('Employee List Test ' + cst.EMP_TOTAL_SCORE + ' Passed -- 3');
                                     log('=====================================================');
 
+                                    log('Employee DEACTIVATE Test 4');
+                                    frisby.create('Employee ' + cst.EMP_TOTAL_SCORE + 'Test -- 4')
+                                        .patch(cst.MAIN_URL + cst.EMPLOYEE + 2 +'/'+ cst.DEACTIVATE)
+                                        .addHeader('Authorization', 'Token ' + token)
+                                        .expectStatus(202)
+                                        .expectHeaderContains('Content-Type', 'application/json')
+                                        .inspectRequest()
+                                        .inspectBody()
+                                        .afterJSON(
+                                            function() {
+                                                log('Employee List Test DEACTIVATE Passed -- 4');
+                                                log('=====================================================');
+
+                                                log('Employee ACTIVATE Test 5');
+                                                frisby.create('Employee ' + cst.EMP_TOTAL_SCORE + 'Test -- 5')
+                                                    .patch(cst.MAIN_URL + cst.EMPLOYEE + 2 +'/'+ cst.ACTIVATE)
+                                                    .addHeader('Authorization', 'Token ' + token)
+                                                    .expectStatus(202)
+                                                    .expectHeaderContains('Content-Type', 'application/json')
+                                                    .inspectRequest()
+                                                    .inspectBody()
+                                                    .toss();
+                                            })
+                                        .toss();
                                 })
                             .toss();
                     })
                 .toss();
-
         })
     .toss();
 
