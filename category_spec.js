@@ -97,24 +97,3 @@ var constants = require('./lib/constants');
                 }
               })
               .toss();
-/*
-//////////////// Subcategory on Categories
-            frisby.create('Returns subcategory detail category list')
-            .get(constants.MAIN_URL + constants.CAT + constants.SUBC)
-            .expectStatus(200)
-            .expectHeaderContains('Content-Type', 'application/json')
-            .expectJSONTypes({
-                pk: undefined,
-                name: undefined,
-                category: undefined
-            })
-
-            .expectJSONTypes('category.*',{
-              id: undefined,
-              name: undefined,
-              weight: undefined,
-              comment_required: undefined
-            })
-
-
-*/
