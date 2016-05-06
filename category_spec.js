@@ -1,7 +1,7 @@
 var frisby = require('./lib/frisby');
 var constants = require('./lib/constants');
 
-
+ //////////////// Category List
             frisby.create('Returns full category list ordered by weight')
                 .get(constants.MAIN_URL + constants.CAT + constants.LIST)
                 .expectStatus(200)
@@ -16,13 +16,13 @@ var constants = require('./lib/constants');
                 .afterJSON(function(json) {
                   console.log(json);
                   for (var i =0 ; i<json.length; i++) {
-                      console.log("On the for" + i);
+                      console.log("For " + i);
                       var val = json[i];
-                      callApi(val);
-                    }
+                      subcategoryList(val);
+                  }
 
-
-                function callApi(val){
+        //////////////// Subcategory List according de ID
+                function subcategoryList(val){
                     console.log("Category: " + val.name + " - id: " +val.pk);
                     frisby.create('Returns full subcategory list according to category id')
                     .get(constants.MAIN_URL + constants.CAT + val.pk +'/' + constants.SUBC + constants.LIST)
@@ -32,56 +32,84 @@ var constants = require('./lib/constants');
                         pk: undefined,
                         name: undefined
                     })
-                    .toss();
+
+                    .afterJSON(
+                      console.log('Returns full subcategory list according to category id - Passed')
+                    );
 
                   }
 
+                })
+                .toss();
+
+//////////////// Keyword List
+                  frisby.create('Returns full keyword list ordered by name')
+                  .get(constants.MAIN_URL + constants.CAT + constants.KEY + constants.LIST)
+                  .expectStatus(200)
+                  .expectHeaderContains('Content-Type', 'application/json')
+                  .expectJSONTypes({
+                      pk: undefined,
+                      name: undefined
+                  })
+
+                  .toss();
 
 
-/*
+
+//////////////// Subcategory List
+
             frisby.create('Returns full subcategory list ordered by name')
             .get(constants.MAIN_URL + constants.CAT + constants.SUBC + constants.LIST)
             .expectStatus(200)
-            .addHeader('Authorization', 'Token ' + res.token)
             .expectHeaderContains('Content-Type', 'application/json')
             .expectJSONTypes({
-                pk: Number,
-                name: String
+                pk: undefined,
+                name: undefined
             })
 
-            .afterJSON(
-                    function(res) {
-                        log('Sub category List Test ordered by name - Passed');
-            })
             .toss();
-
+/*
+//////////////// Subcategory on Categories
             frisby.create('Returns subcategory detail category list')
             .get(constants.MAIN_URL + constants.CAT + constants.SUBC)
             .expectStatus(200)
-            .addHeader('Authorization', 'Token ' + res.token)
             .expectHeaderContains('Content-Type', 'application/json')
             .expectJSONTypes({
-                pk: Number,
-                name: String,
-                category: String
+                pk: undefined,
+                name: undefined,
+                category: undefined
             })
 
             .expectJSONTypes('category.*',{
-              id: Number,
-              name: String,
-              weight: Number,
-              comment_required: Boolean
+              id: undefined,
+              name: undefined,
+              weight: undefined,
+              comment_required: undefined
             })
-            .afterJSON(
-                    function(res) {
-                        log('Sub category List Detail Test - Passed');
-            })
-           .toss();
+
+            .afterJSON(function(json) {
+              console.log(json);
+              for (var i =0 ; i<json.length; i++) {
+                  console.log("On the for" + i);
+                  var val = json[i];
+                  subcategoryDetail(val);
+              }
+
+            function subCategoryDetail(val){
+                console.log("Category: " + val.name + " - id: " +val.pk);
+                frisby.create('Returns full subcategory list according to category id')
+                .get(constants.MAIN_URL + constants.CAT + constants.SUBC + val.pk +'/')
+                .expectStatus(200)
+                .expectHeaderContains('Content-Type', 'application/json')
+                .expectJSONTypes({
+                    pk: undefined,
+                    name: undefined
+                  })
+
+                  .afterJSON(
+                    console.log('Returns full subcategory list according to category id - Passed')
+                  );
+                }
+              })
+              .toss();
 */
-    })
-    .toss();
-
-
-function log(params){
-    console.log(params);
-}
