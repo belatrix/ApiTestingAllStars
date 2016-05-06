@@ -67,7 +67,36 @@ var constants = require('./lib/constants');
                 name: undefined
             })
 
-            .toss();
+            .afterJSON(function(json) {
+              console.log(json);
+              for (var i =0 ; i<json.length; i++) {
+                  console.log("On the for" + i);
+                  var val = json[i];
+                  subcategoryDetail(val);
+              }
+
+            function subcategoryDetail(val){
+                console.log("Category: " + val.name + " - id: " +val.pk);
+                frisby.create('Returns full subcategory list according to category id')
+                .get(constants.MAIN_URL + constants.CAT + constants.SUBC + val.pk +'/')
+                .expectStatus(200)
+                .expectHeaderContains('Content-Type', 'application/json')
+                .expectJSONTypes({
+                    pk: undefined,
+                    name: undefined,
+                    category: undefined
+                })
+
+                .expectJSONTypes('category.*',{
+                  id: undefined,
+                  name: undefined,
+                  weight: undefined,
+                  comment_required: undefined
+                });
+
+                }
+              })
+              .toss();
 /*
 //////////////// Subcategory on Categories
             frisby.create('Returns subcategory detail category list')
@@ -87,29 +116,5 @@ var constants = require('./lib/constants');
               comment_required: undefined
             })
 
-            .afterJSON(function(json) {
-              console.log(json);
-              for (var i =0 ; i<json.length; i++) {
-                  console.log("On the for" + i);
-                  var val = json[i];
-                  subcategoryDetail(val);
-              }
 
-            function subCategoryDetail(val){
-                console.log("Category: " + val.name + " - id: " +val.pk);
-                frisby.create('Returns full subcategory list according to category id')
-                .get(constants.MAIN_URL + constants.CAT + constants.SUBC + val.pk +'/')
-                .expectStatus(200)
-                .expectHeaderContains('Content-Type', 'application/json')
-                .expectJSONTypes({
-                    pk: undefined,
-                    name: undefined
-                  })
-
-                  .afterJSON(
-                    console.log('Returns full subcategory list according to category id - Passed')
-                  );
-                }
-              })
-              .toss();
 */
