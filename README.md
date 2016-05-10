@@ -31,7 +31,27 @@ Node:
 https://nodejs.org/en/
 
 Frisby:
-http://frisbyjs.com/ 
+http://frisbyjs.com/
 
 Jasmine:
 https://www.npmjs.com/package/jasmine
+
+
+## Local Server
+
+```bash
+workon allstars
+rm AllStars/db.sqlite3
+python manage.py makemigrations
+pip install -r requirements/local.txt
+python manage.py makemigrations
+python manage.py migrate
+python manage.py loaddata sample_data/*.json
+python manage.py runserver
+```
+
+To exit
+
+```bash
+deactivate
+```
