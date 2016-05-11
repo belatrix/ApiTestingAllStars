@@ -45,11 +45,15 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Code
 source /usr/local/bin/virtualenvwrapper.sh
 ```
+
+Install:
+```bash
+pip install -r requirements/local.txt
+```
+
 ```bash
 workon allstars
 rm AllStars/db.sqlite3
-python manage.py makemigrations
-pip install -r requirements/local.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py loaddata sample_data/*.json
