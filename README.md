@@ -39,6 +39,12 @@ https://www.npmjs.com/package/jasmine
 
 ## Local Server
 
+Put on .bash_profile
+```bash
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Code
+source /usr/local/bin/virtualenvwrapper.sh
+```
 ```bash
 workon allstars
 rm AllStars/db.sqlite3
