@@ -53,6 +53,21 @@ frisby.create('Authentication Test')
                             }
                         });
 
+                        frisby.create('Give stars to many employees')
+                        .post(constants.MAIN_URL + constants.STAR + constants.IDBOBBY + constants.GIVESTARS + constants.MANY, {
+                          "category": "1",
+                          "subcategory": "1",
+                          "keyword": "1",
+                          "text": "android",
+                          "to_users": [constants.IDSERGIO, constants.IDPABLO]
+                        }, {
+                          json: true
+                        } )
+                        .expectStatus(201)
+                        .afterJSON(function (json){
+
+
+
                     frisby.create('Get star')
                       .get(constants.MAIN_URL + constants.STAR + constants.STAR_ID)
                       .addHeader('Authorization', 'Token' + token)
@@ -94,6 +109,9 @@ frisby.create('Authentication Test')
                       .toss();
                 })
                 .toss();
+
+              })
+              .toss();
         })
     .toss();
 
